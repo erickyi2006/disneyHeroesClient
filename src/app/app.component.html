@@ -1,0 +1,21 @@
+<div style="text-align:center">
+  <mat-toolbar color="primary" class="app-toolbar">
+    <button mat-icon-button (click)="toggle(snav)">
+      <img src="favicon.ico" />
+    </button>
+    <h1 class="app-app-name">{{title}} {{version}}</h1>
+    <span class="span-fill-remaining-space"></span>
+
+    <a href="/#">
+      <mat-icon>home</mat-icon>
+    </a>
+  </mat-toolbar>
+
+  <mat-sidenav-container #snav class="app-sidenav-container" 
+    [style.marginTop.px]="mobileQuery.matches ? 3 : 0"
+    fixedTopGap="56">
+    <mat-sidenav-content style="padding:5px">
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,230 @@
+<div style="width:100%; display:flex">
+    <div style="flex:9;text-align:left;">
+        <button mat-raised-button color="primary" [disabled]="!isDataChanged()" (click)="onSave()">
+            <mat-icon title="Save">save</mat-icon>
+            Save
+        </button>
+        <button mat-raised-button color="primary" (click)="onExportCSV()">
+            <mat-icon title="Export to CSV">arrow_downward</mat-icon>
+            CSV
+        </button>
+        <div style="display:inline-block;width:calc(100% - 200px);">
+            <h3 style="display:block;margin-left:auto;margin-right:auto;text-align:center;">
+                Team Combination
+            </h3>
+        </div>
+    </div>
+    <div style="flex:1;">
+        <mat-form-field>
+            <input matInput [(ngModel)]="playerInputData.filteredHero" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        </mat-form-field>
+        <div [hidden]="true">
+            <a #exportLink class="e2e-trusted-url" [href]="exportUrl" [download]="exportFilename">Download</a>
+        </div>
+    </div>
+</div>
+<div class="mat-elevation-z8 table-fixed-outerContainer">
+    <div class="table-fixed-innerContainer">
+        <table class="table table-fixed" mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="player">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Player</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput (keyup)="onFilterPlayer($event.target.value)" [(ngModel)]="playerInputData.player"
+                        placeholder="Player" />
+                    </mat-form-field>
+                </th>
+                <td title="{{row.role}}" mat-cell *matCellDef="let row" (click)="selectRow(row)"> 
+                    {{row.player}} 
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hero1">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Hero 1</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput [(ngModel)]="playerInputData.hero1"
+                            (ngModelChange)="onFilterHero(1, $event)" [matAutocomplete]="auto_1"
+                            placeholder="Hero" />
+                        <mat-autocomplete (optionSelected)="onSelectAutocompleteHero(1, $event)"
+                            #auto_1="matAutocomplete">
+                            <mat-option *ngFor="let item of arrayOfHeroes[1]" [value]="item.hero">
+                                <span>{{item.hero}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-select (selectionChange)='onSelectDisk(1,$event)' [(ngModel)]="playerInputData.disk1"
+                        style="text-align: right;" placeholder="Disk1">
+                        <mat-option value="None">None</mat-option>
+                        <mat-option *ngFor="let item of arrayOfFriendships[1]" [value]="item.disk">
+                            {{item.friend}}
+                        </mat-option>
+                    </mat-select>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <a (click)="selectHero(row.hero1)">
+                        <img src="{{ASSETS_PATH}}/resources/{{row.hero1}}.png" title="{{row.hero1}}" />
+                    </a>
+                    <span ngClass="disk_{{row.hero1}}_{{row.disk1}}">{{row.disk1}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hero2">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Hero 2</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput [(ngModel)]="playerInputData.hero2" 
+                        (ngModelChange)="onFilterHero(2, $event)"
+                        [matAutocomplete]="auto_2" placeholder="Hero" />
+                        <mat-autocomplete (optionSelected)="onSelectAutocompleteHero(2, $event)" #auto_2="matAutocomplete">
+                            <mat-option *ngFor="let item of arrayOfHeroes[2]" [value]="item.hero">
+                                <span>{{item.hero}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-select (selectionChange)='onSelectDisk(2, $event)' [(ngModel)]="playerInputData.disk2"
+                        style="text-align: right;" placeholder="Disk2">
+                        <mat-option value="None">None</mat-option>
+                        <mat-option *ngFor="let item of arrayOfFriendships[2]" [value]="item.disk">
+                            {{item.friend}}
+                        </mat-option>
+                    </mat-select>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <a (click)="selectHero(row.hero2)">
+                        <img src="{{ASSETS_PATH}}/resources/{{row.hero2}}.png" title="{{row.hero2}}" />
+                    </a>
+                    <span ngClass="disk_{{row.hero2}}_{{row.disk2}}">{{row.disk2}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hero3">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Hero 3</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput [(ngModel)]="playerInputData.hero3" 
+                        (ngModelChange)="onFilterHero(3, $event)"
+                        [matAutocomplete]="auto_3" placeholder="Hero" />
+                        <mat-autocomplete (optionSelected)="onSelectAutocompleteHero(3, $event)" #auto_3="matAutocomplete">
+                            <mat-option *ngFor="let item of arrayOfHeroes[3]" [value]="item.hero">
+                                <span>{{item.hero}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-select (selectionChange)='onSelectDisk(3, $event)' [(ngModel)]="playerInputData.disk3"
+                        style="text-align: right;" placeholder="Disk3">
+                        <mat-option value="None">None</mat-option>
+                        <mat-option *ngFor="let item of arrayOfFriendships[3]" [value]="item.disk">
+                            {{item.friend}}
+                        </mat-option>
+                    </mat-select>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <a (click)="selectHero(row.hero3)">
+                        <img src="{{ASSETS_PATH}}/resources/{{row.hero3}}.png" title="{{row.hero3}}" />
+                    </a>
+                    <span ngClass="disk_{{row.hero3}}_{{row.disk3}}">{{row.disk3}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hero4">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Hero 4</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput [(ngModel)]="playerInputData.hero4" 
+                        (ngModelChange)="onFilterHero(4, $event)"
+                        [matAutocomplete]="auto_4" placeholder="Hero" />
+                        <mat-autocomplete (optionSelected)="onSelectAutocompleteHero(4, $event)" #auto_4="matAutocomplete">
+                            <mat-option *ngFor="let item of arrayOfHeroes[4]" [value]="item.hero">
+                                <span>{{item.hero}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-select (selectionChange)='onSelectDisk(4, $event)' [(ngModel)]="playerInputData.disk4"
+                        style="text-align: right;" placeholder="Disk4">
+                        <mat-option value="None">None</mat-option>
+                        <mat-option *ngFor="let item of arrayOfFriendships[4]" [value]="item.disk">
+                            {{item.friend}}
+                        </mat-option>
+                    </mat-select>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <a (click)="selectHero(row.hero4)">
+                        <img src="{{ASSETS_PATH}}/resources/{{row.hero4}}.png" title="{{row.hero4}}" />
+                    </a>
+                    <span ngClass="disk_{{row.hero4}}_{{row.disk4}}">{{row.disk4}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hero5">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Hero 5</span>
+                    </div>
+                    <mat-form-field appearance="standard">
+                        <input matInput [(ngModel)]="playerInputData.hero5" 
+                        (ngModelChange)="onFilterHero(5, $event)"
+                        [matAutocomplete]="auto_5" placeholder="Hero" />
+                        <mat-autocomplete (optionSelected)="onSelectAutocompleteHero(5, $event)" #auto_5="matAutocomplete">
+                            <mat-option *ngFor="let item of arrayOfHeroes[5]" [value]="item.hero">
+                                <span>{{item.hero}}</span>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-select (selectionChange)='onSelectDisk(5, $event)' [(ngModel)]="playerInputData.disk5"
+                        style="text-align: right;" placeholder="Disk5">
+                        <mat-option value="None">None</mat-option>
+                        <mat-option *ngFor="let item of arrayOfFriendships[5]" [value]="item.disk">
+                            {{item.friend}}
+                        </mat-option>
+                    </mat-select>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <a (click)="selectHero(row.hero5)">
+                        <img src="{{ASSETS_PATH}}/resources/{{row.hero5}}.png" title="{{row.hero5}}" />
+                    </a>
+                    <span ngClass="disk_{{row.hero5}}_{{row.disk5}}">{{row.disk5}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="app-table-row-header">
+                        <span mat-sort-header>Action</span>
+                    </div>
+                    <button mat-icon-button color="primary" (click)="onAddRow()" [disabled]="!isValidEntry()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <div style="display:flex">
+                        <button mat-icon-button color="primary" (click)="onEditRow(row)">
+                            <mat-icon class="small">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" (click)="onRemoveRow(row)" [disabled]="!isEntryDeletable(row)">
+                            <mat-icon  class="small">delete</mat-icon>
+                        </button>    
+                    </div>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                [class.selectedRow]="selectedRow && selectedRow.id == row.id">
+            </tr>
+        </table>
+    </div>
+</div>
+<mat-paginator [pageSizeOptions]="[5,10,25,100,500,1000]"></mat-paginator>

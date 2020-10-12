@@ -1,0 +1,49 @@
+<div>
+    <mat-toolbar color="primary" class="app-actionbar">
+        <button mat-icon-button (click)="toggle(snav)">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </mat-toolbar>
+</div>
+<mat-sidenav-container class="app-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 1 : 0">
+    <mat-sidenav opened="true" class="app-sidenav-container-panel" #snav [mode]="mobileQuery.matches ? 'over' : 'side'">
+        <mat-nav-list class="app-sidenav-container-panel">
+            <mat-list-item>
+                <button mat-icon-button (click)="goBack()">
+                    <mat-icon title="Goto Home" class="white">home</mat-icon>
+                </button>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <h1 class="app-sidenav-container-item">
+                DISNEY HEROES
+            </h1>
+            <mat-list-item>
+                <button mat-icon-button [class.active]="isActive('Roles')" (click)="onSelect('Roles')">
+                    <mat-icon title="Roles" class="white">nature_people</mat-icon>
+                </button>
+            </mat-list-item>
+            <mat-list-item>
+                <button mat-icon-button [class.active]="isActive('Friendships')" (click)="onSelect('Friendships')">
+                    <mat-icon title="Friendships" class="white">group</mat-icon>
+                </button>
+            </mat-list-item>
+            <mat-list-item>
+                <button mat-icon-button [class.active]="isActive('Teams')" (click)="onSelect('Teams')">
+                    <mat-icon title="Team Statistics" class="white">insert_chart_outlined</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="padding:5px;overflow:hidden">
+        <div *ngIf="activeMenu=='Teams'">
+            <app-stats-dataentry></app-stats-dataentry>
+        </div>
+        <div *ngIf="activeMenu=='Roles'">
+            Roles - Coming soon
+        </div>
+        <div *ngIf="activeMenu=='Friendships'">
+            Friendship - Coming soon
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
